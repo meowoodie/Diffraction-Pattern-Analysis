@@ -15,7 +15,7 @@ function [ cropping_mask ] = crop_sector( shape, center_x, center_y, ...
                 angle = angle - 360*sign(angle);
             end
             
-            if angle < start_angle || angle > end_angle
+            if angle <= start_angle || angle > end_angle
                 cropping_mask(y, x) = 0;
             else
                 cropping_mask(y, x) = 1;

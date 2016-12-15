@@ -22,8 +22,10 @@ radius_range = [60, 100];
 ring_width   = 4;
 angle_step   = 3;
 
-rearranged_mat = rearrange(stack3D, center, radius_range, ...
-                           ring_width, angle_step);
+[ring_masks, sector_masks, rearranged_mat] = ...
+    rearrange(stack3D, center, radius_range, ...
+              ring_width, angle_step);
 % Save the results
 save('rearranged.mat', 'rearranged_mat');
+
 

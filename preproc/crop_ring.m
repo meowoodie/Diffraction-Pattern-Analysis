@@ -18,7 +18,7 @@ function [ cropping_mask ] = crop_ring( shape, center_x, center_y, ...
             % The distance between from current element and the center
             dist_sqr = (x - center_x) ^ 2 + (y - center_y) ^ 2;
             
-            if dist_sqr > outer_radius ^ 2 || dist_sqr < inner_radius ^ 2
+            if dist_sqr >= outer_radius ^ 2 || dist_sqr < inner_radius ^ 2
                 cropping_mask(y, x) = 0;
             else
                 cropping_mask(y, x) = 1;

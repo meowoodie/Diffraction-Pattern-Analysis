@@ -1,6 +1,13 @@
-function [ rearranged_mat ] = rearrange( mats, center, rings_range, ...
-                                         ring_width, angle_step )
-% RINGS 
+function [ ring_masks, sector_masks, rearranged_mat ] = ...
+    rearrange( mats, center, rings_range, ...
+               ring_width, angle_step )
+% REARRANGE 
+% It would convert each of the 2d matrixs in mats to a new matrix according
+% to the polar coordinate. It would return the ring masks and the sector
+% masks which are used to rearrange the zones. 
+% - mats: a 3d matrix
+% - center: the location of the center of the polar coordinate
+% - rings_range: 
 
     % Init basic parameters
     shape    = size(mats(:,:,1)); % The shape of a 2d matrix
@@ -49,7 +56,8 @@ function [ rearranged_mat ] = rearrange( mats, center, rings_range, ...
             for j = 1:sec_num
                 unit_area = mats(k) .* ...
                             ring_masks(:,:,i) .* sector_masks(:,:,j);
-                rearranged_mat(i,j,k) = sum(unit_area(:));
+                rearranged_mat(i,j,k) = sum(unit_area(:)) / ...
+                                        length(find(unit_area));
             end
         end
     end
