@@ -1,12 +1,10 @@
-function [ rearranged_mat ] = rearrange( mats, ring_masks, sector_masks, ...
-                                         x_range, y_range) 
-                                         % In order to speed up the
-                                         % computation, we only compute the
-                                         % elements in the specific range.
+function [ rearranged_mat ] = rearrange( mats, ring_masks, sector_masks)                                         
 % REARRANGE 
 % It would convert each of the 2d matrixs in mats to a new matrix according
 % to the polar coordinate. It would return the rearranged 3d matrix with
 % shape ([rings_num, sec_num, mat_num])
+% In order to speed up the computation, we only compute the elements in the
+% specific range.
 % - mats: a 3d matrix
 % - ring_masks: a set of ring masks
 % - sector_masks: a set of sector masks
@@ -20,12 +18,26 @@ function [ rearranged_mat ] = rearrange( mats, ring_masks, sector_masks, ...
     % the final mask (ring_mask * sector_mask) for each element of the 
     % rearranged matrix in ahead.
     fprintf('Preparing the masks ...\n');
-    mat_width  = size(mats, 1);
-    mat_height = size(mats, 2);
-    mask_mat = zeros(mat_width, mat_height, rings_num, sec_num);
+    mat_y = size(mats, 1);
+    mat_x = size(mats, 2);
+    mask_mat = zeros([mat_y, mat_x, rings_num, sec_num]);
+    x_range  = zeros([2, rings_num, sec_num]);
+    y_range  = zeros([2, rings_num, sec_num]);
+    num_valid_eles = zeros([rings_num, sec_num]);
     for i = 1:rings_num
         for j = 1:sec_num
+            % Preparing the mask
             mask_mat(:,:,i,j) = ring_masks(:,:,i) .* sector_masks(:,:,j);
+            % Preparing the range of the mask
+            % Calculate the center of the valid elememts in the mask
+            [ys, xs] = find(mask_mat(:,:,i,j));
+            avg_x = int16(mean(xs)); avg_y = int16(mean(ys));
+            x_range(:,i,j) = [avg_x-10 avg_x+10]; 
+            y_range(:,i,j) = [avg_y-10 avg_y+10];
+            % Calculate the number of the valid elements in the mask
+            num_valid_eles(i,j) = length(find(mask_mat( ...
+                                  y_range(1,i,j):y_range(2,i,j), ...
+                                  x_range(1,i,j):x_range(2,i,j),i,j)));
         end
     end
     
@@ -37,23 +49,38 @@ function [ rearranged_mat ] = rearrange( mats, ring_masks, sector_masks, ...
         % For each of the rings
         for i = 1:rings_num
             for j = 1:sec_num
-                unit_area = mats(y_range(1):y_range(2), ...
-                                 x_range(1):x_range(2),k) .* ...
-                            mask_mat(y_range(1):y_range(2), ...
-                                     x_range(1):x_range(2),i,j);
+                % Do multiplication
+                unit_area = mats(y_range(1,i,j):y_range(2,i,j), ...
+                                 x_range(1,i,j):x_range(2,i,j),k) .* ...
+                            mask_mat(y_range(1,i,j):y_range(2,i,j), ...
+                                     x_range(1,i,j):x_range(2,i,j),i,j);
                 % unit_area = mats(:,:,k) .* mask_mat(:,:,i,j);
-                %             ring_masks(:,:,i) .* sector_masks(:,:,j);
+                
+                % Average the sum of the value of the valid elements
                 rearranged_mat(i,j,k) = sum(unit_area(:)) / ...
-                                        length(find(mask_mat( ...
-                                           y_range(1):y_range(2), ...
-                                           x_range(1):x_range(2),i,j)));
+                                        num_valid_eles(i,j);
                                         % valid value in unit area includes
                                         % 0, so it uses mask_mat to count
-                                        % the number of valid values.                      
+                                        % the number of valid values. 
             end
         end
     end
     
+%     % For debugging
+%     i = 13; j = 10; k = 1;
+%     % Do multiplication
+%     unit_area = mats(y_range(1,i,j):y_range(2,i,j), ...
+%                      x_range(1,i,j):x_range(2,i,j),k) .* ...
+%                 mask_mat(y_range(1,i,j):y_range(2,i,j), ...
+%                          x_range(1,i,j):x_range(2,i,j),i,j);
+%     figure; imshow(mask_mat(y_range(1,i,j):y_range(2,i,j), ...
+%                             x_range(1,i,j):x_range(2,i,j),i,j));
+%     figure; imshow(mats(y_range(1,i,j):y_range(2,i,j), ...
+%                         x_range(1,i,j):x_range(2,i,j),k));imcontrast(gca);
+%     figure; imshow(unit_area);imcontrast(gca);
+%     disp(sum(unit_area(:)));
+%     disp(x_range(:,i,j));
+                          
 %     % Calculate the distances between the list of the screened pixels and the 
 %     % center of the ring
 %     dist_screened2center = pdist2( ...

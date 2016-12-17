@@ -8,7 +8,7 @@ addpath(genpath('utils/'));
 
 top_dir = '/Users/woodie/Desktop/Georgia-Tech-ISyE-Intern/data/ITO_D10_patterns1';
 minuteRange = 0:1;
-secondRange = 0:59;
+secondRange = 0:1;
 
 % Read data from DM4 file folder
 [stack3D,xv,yv] = K2importDM4(top_dir, minuteRange, secondRange);
@@ -25,8 +25,6 @@ center = [525 520];
 radius_range = [60, 100];
 ring_width   = 2;
 angle_step   = 3;
-x_range = [center(1)-radius_range(2)-1, center(1)+radius_range(2)+1];
-y_range = [center(2)-radius_range(2)-1, center(2)+radius_range(2)+1];
 
 %% Create new masks
  
@@ -50,9 +48,8 @@ sector_masks = vars.sector_masks;
 
 %% Rearrange the matrix
 
-rearranged_mat = rearrange(stack3D(:,:,1:300), ...
-                           ring_masks, sector_masks, ...
-                           x_range, y_range);
+rearranged_mat = rearrange(stack3D(:,:,1:2), ...
+                           ring_masks, sector_masks);
 
 % Save the results
 saved_file_name = sprintf('%s.rearr.mat', date);
