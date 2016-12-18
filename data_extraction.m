@@ -8,7 +8,7 @@ addpath(genpath('utils/'));
 
 top_dir = '/Users/woodie/Desktop/Georgia-Tech-ISyE-Intern/data/ITO_D10_patterns1';
 minuteRange = 0:1;
-secondRange = 0:1;
+secondRange = 0:59;
 
 % Read data from DM4 file folder
 [stack3D,xv,yv] = K2importDM4(top_dir, minuteRange, secondRange);
@@ -41,20 +41,20 @@ angle_step   = 3;
           
 %% Load saved masks
 
-saved_mask_name = 'mask.rad60-100.rw2.as3.16-Dec-2016.mat'; % CHECK IT EVERY TIME YOU RUN IT!
+saved_mask_name = 'mask.rad60-100.rw2.as3.17-Dec-2016.mat'; % CHECK IT EVERY TIME YOU RUN IT!
 vars = load(saved_mask_name);
 ring_masks   = vars.ring_masks;
 sector_masks = vars.sector_masks;
 
 %% Rearrange the matrix
 
-rearranged_mat = rearrange(stack3D(:,:,1:2), ...
+rearranged_mat = rearrange(stack3D(:,:,1:1500), ...
                            ring_masks, sector_masks);
-
-% Save the results
-saved_file_name = sprintf('%s.rearr.mat', date);
-save(saved_file_name, 'rearranged_mat');
 
 % Plot the results
 file_prefix = 'all'; % CHECK IT EVERY TIME YOU RUN IT!
 plot_mat(rearranged_mat, res_dir, file_prefix);
+
+% Save the results
+saved_file_name = sprintf('%s.rearr.mat', date);
+save(saved_file_name, 'rearranged_mat');

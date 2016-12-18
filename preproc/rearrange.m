@@ -9,15 +9,15 @@ function [ rearranged_mat ] = rearrange( mats, ring_masks, sector_masks)
 % - ring_masks: a set of ring masks
 % - sector_masks: a set of sector masks
     
-    mat_num   = length(mats(1,1,:));
-    rings_num = length(ring_masks(1,1,:));
-    sec_num   = length(sector_masks(1,1,:));
+    mat_num   = size(mats, 3);         % length(mats(1,1,:));
+    rings_num = size(ring_masks, 3);   % length(ring_masks(1,1,:));
+    sec_num   = size(sector_masks, 3); % length(sector_masks(1,1,:));
     
     % Preliminary for masks
     % For the purpose of speeding up the whole process, it would calculate
     % the final mask (ring_mask * sector_mask) for each element of the 
     % rearranged matrix in ahead.
-    fprintf('Preparing the masks ...\n');
+    fprintf('Doing preliminary computation in ahead ...\n');
     mat_y = size(mats, 1);
     mat_x = size(mats, 2);
     mask_mat = zeros([mat_y, mat_x, rings_num, sec_num]);
