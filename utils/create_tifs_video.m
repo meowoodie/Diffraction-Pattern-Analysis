@@ -1,7 +1,7 @@
 % Define the working directory where the images store.
-workingDir = '/Users/woodie/Desktop/IT0_D10_rearranged_res';
+workingDir = '/Users/woodie/Desktop/row_2';
 % Define the file name of output video.
-videoName = 'IT0_D10_patterns1_rearranged';
+videoName = 'row_2_over_time';
 % Locate the directory of the image files.
 imageNames = dir(fullfile(workingDir, '*.png'));
 imageNames = {imageNames.name}';

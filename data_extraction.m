@@ -22,29 +22,29 @@ end
 % Init parameter
 shape  = [1024, 1024];
 center = [525 520];
-radius_range = [60, 100];
-ring_width   = 2;
+radius_range = [50, 100];
+ring_width   = 1;
 angle_step   = 3;
 
 %% Create new masks
  
-% [ring_masks, sector_masks] = ...
-%     masks(shape, center, ...
-%           radius_range, ring_width, ... % Ring masks paras
-%           angle_step);                  % Sector masks para
-% 
-% % Save the masks
-% saved_mask_name = sprintf('mask.rad%d-%d.rw%d.as%d.%s.mat', ...
-%                           radius_range(1), radius_range(2), ...
-%                           ring_width, angle_step, date);
-% save(saved_mask_name, 'ring_masks', 'sector_masks');
+[ring_masks, sector_masks] = ...
+    masks(shape, center, ...
+          radius_range, ring_width, ... % Ring masks paras
+          angle_step);                  % Sector masks para
+
+% Save the masks
+saved_mask_name = sprintf('mask.rad%d-%d.rw%d.as%d.%s.mat', ...
+                          radius_range(1), radius_range(2), ...
+                          ring_width, angle_step, date);
+save(saved_mask_name, 'ring_masks', 'sector_masks');
           
 %% Load saved masks
 
-saved_mask_name = 'mask.rad60-100.rw2.as3.17-Dec-2016.mat'; % CHECK IT EVERY TIME YOU RUN IT!
-vars = load(saved_mask_name);
-ring_masks   = vars.ring_masks;
-sector_masks = vars.sector_masks;
+% saved_mask_name = 'mask.rad30-100.rw1.as3.28-Dec-2016.mat'; % CHECK IT EVERY TIME YOU RUN IT!
+% vars = load(saved_mask_name);
+% ring_masks   = vars.ring_masks;
+% sector_masks = vars.sector_masks;
 
 %% Rearrange the matrix
 
