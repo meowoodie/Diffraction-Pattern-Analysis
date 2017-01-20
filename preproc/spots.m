@@ -32,7 +32,7 @@ function [ bright_spots, bright_spots_stat ] = spots(mats, ...
                 end
             end
         end
-%         figure; imshow(rows);
+        figure; imshow(rows);
 
         % Extract bright spots
         % The data structure for one bright spot:

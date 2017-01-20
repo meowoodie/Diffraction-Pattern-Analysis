@@ -1,7 +1,7 @@
 % Define the working directory where the images store.
-workingDir = '/Users/woodie/Desktop/row_2';
+workingDir = '/Users/woodie/Desktop/test_row_35';
 % Define the file name of output video.
-videoName = 'row_2_over_time';
+videoName = 'row_35_over_time';
 % Locate the directory of the image files.
 imageNames = dir(fullfile(workingDir, '*.png'));
 imageNames = {imageNames.name}';

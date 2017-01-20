@@ -7,7 +7,7 @@ addpath(genpath('utils/'));
 %% Load saved rearranged matrix
 
 % basic configuration
-rad_ind_range = 1:50;
+rad_ind_range = 35;
 rad_start = 60;
 rad_step  = 2;
 ang_step  = 3;
