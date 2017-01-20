@@ -40,7 +40,7 @@ angle_step   = 360;
 
 %% Get the radius-intensity matrix for each of the frame
 
-mats_size  = size(mats, 3);
+mats_size  = 500; % size(mats, 3);
 masks_size = size(ring_masks, 3);
 radius_intensity_mat = ones(mats_size, masks_size);
 for i=1:mats_size
